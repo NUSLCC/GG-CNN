@@ -13,12 +13,14 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate GG-CNN')
 
     # Network
-    parser.add_argument('--network', type=str, default="./output/models/240718_1720_training/epoch_43_iou_0.77", help='Path to saved network to evaluate')
+    #parser.add_argument('--network', type=str, default="./output/models/240718_1720_training/epoch_43_iou_0.77", help='Path to saved network to evaluate')
+    parser.add_argument('--network', type=str, default="./output/models/240718_2040_jac/epoch_00_iou_0.65", help='Path to saved network to evaluate')
 
     # Dataset & Data & Training
     home_dir = os.path.expanduser("~")
-    parser.add_argument('--dataset', type=str, default="cornell", help='Dataset Name ("cornell" or "jaquard")')
-    parser.add_argument('--dataset-path', type=str, default=home_dir + "/Dataset/cornell", help='Path to dataset')
+    default_dataset = "jacquard"
+    parser.add_argument('--dataset', type=str, default=default_dataset, help='Dataset Name ("cornell" or "jaquard")')
+    parser.add_argument('--dataset-path', type=str, default=home_dir + "/Dataset/" + default_dataset, help='Path to dataset')
     parser.add_argument('--use-depth', type=int, default=1, help='Use Depth image for evaluation (1/0)')
     parser.add_argument('--use-rgb', type=int, default=0, help='Use RGB image for evaluation (0/1)')
     parser.add_argument('--augment', action='store_true', help='Whether data augmentation should be applied')
