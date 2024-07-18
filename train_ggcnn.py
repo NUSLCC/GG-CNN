@@ -3,9 +3,7 @@ import os
 import sys
 import argparse
 import logging
-
 import cv2
-
 import torch
 import torch.utils.data
 import torch.optim as optim
@@ -30,13 +28,13 @@ def parse_args():
     parser.add_argument('--network', type=str, default='ggcnn', help='Network Name in .models')
 
     # Dataset & Data & Training
-    parser.add_argument('--dataset', type=str, help='Dataset Name ("cornell" or "jaquard")')
-    parser.add_argument('--dataset-path', type=str, help='Path to dataset')
+    home_dir = os.path.expanduser("~")
+    parser.add_argument('--dataset', type=str, default="cornell", help='Dataset Name ("cornell" or "jaquard")')
+    parser.add_argument('--dataset-path', type=str, default=home_dir + "/Dataset/cornell", help='Path to dataset')
     parser.add_argument('--use-depth', type=int, default=1, help='Use Depth image for training (1/0)')
     parser.add_argument('--use-rgb', type=int, default=0, help='Use RGB image for training (0/1)')
     parser.add_argument('--split', type=float, default=0.9, help='Fraction of data for training (remainder is validation)')
-    parser.add_argument('--ds-rotate', type=float, default=0.0,
-                        help='Shift the start point of the dataset to use a different test/train split for cross validation.')
+    parser.add_argument('--ds-rotate', type=float, default=0.0, help='Shift the start point of the dataset to use a different test/train split for cross validation.')
     parser.add_argument('--num-workers', type=int, default=8, help='Dataset workers')
 
     parser.add_argument('--batch-size', type=int, default=8, help='Batch size')
@@ -45,7 +43,7 @@ def parse_args():
     parser.add_argument('--val-batches', type=int, default=250, help='Validation Batches')
 
     # Logging etc.
-    parser.add_argument('--description', type=str, default='', help='Training description')
+    parser.add_argument('--description', type=str, default='training', help='Training description')
     parser.add_argument('--outdir', type=str, default='output/models/', help='Training Output Directory')
     parser.add_argument('--logdir', type=str, default='tensorboard/', help='Log directory')
     parser.add_argument('--vis', action='store_true', help='Visualise the training process')
