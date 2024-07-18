@@ -8,3 +8,4 @@ output
 
 /.python-version
 *.zip
+condaenv*.txt
