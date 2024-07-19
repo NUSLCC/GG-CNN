@@ -36,10 +36,10 @@ def parse_args():
     parser.add_argument('--use-rgb', type=int, default=0, help='Use RGB image for training (0/1)')
     parser.add_argument('--split', type=float, default=0.9, help='Fraction of data for training (remainder is validation)')
     parser.add_argument('--ds-rotate', type=float, default=0.0, help='Shift the start point of the dataset to use a different test/train split for cross validation.')
-    parser.add_argument('--num-workers', type=int, default=8, help='Dataset workers')
+    parser.add_argument('--num-workers', type=int, default=24, help='Dataset workers')
 
-    parser.add_argument('--batch-size', type=int, default=8, help='Batch size')
-    parser.add_argument('--epochs', type=int, default=50, help='Training epochs')
+    parser.add_argument('--epochs', type=int, default=100, help='Training epochs')
+    parser.add_argument('--batch-size', type=int, default=32, help='Batch size')
     parser.add_argument('--batches-per-epoch', type=int, default=1000, help='Batches per Epoch')
     parser.add_argument('--val-batches', type=int, default=250, help='Validation Batches')
 
@@ -101,8 +101,7 @@ def validate(net, device, val_data, batches_per_epoch):
                 s = evaluation.calculate_iou_match(q_out, ang_out,
                                                    val_data.dataset.get_gtbb(didx, rot, zoom_factor),
                                                    no_grasps=1,
-                                                   grasp_width=w_out,
-                                                   )
+                                                   grasp_width=w_out,)
 
                 if s:
                     results['correct'] += 1
