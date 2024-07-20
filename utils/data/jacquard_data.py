@@ -22,6 +22,7 @@ class JacquardDataset(GraspDatasetBase):
         graspf = glob.glob(os.path.join(file_path, '*', '*', '*_grasps.txt'))
         graspf.sort()
         l = len(graspf)
+        print("len jaccquard:", l)
 
         if l == 0:
             raise FileNotFoundError('No dataset files found. Check path: {}'.format(file_path))

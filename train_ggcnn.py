@@ -38,10 +38,11 @@ def parse_args():
     parser.add_argument('--ds-rotate', type=float, default=0.0, help='Shift the start point of the dataset to use a different test/train split for cross validation.')
     parser.add_argument('--num-workers', type=int, default=24, help='Dataset workers')
 
-    parser.add_argument('--epochs', type=int, default=100, help='Training epochs')
+    parser.add_argument('--epochs', type=int, default=1000, help='Training epochs')
     parser.add_argument('--batch-size', type=int, default=32, help='Batch size')
-    parser.add_argument('--batches-per-epoch', type=int, default=1000, help='Batches per Epoch')
-    parser.add_argument('--val-batches', type=int, default=250, help='Validation Batches')
+    parser.add_argument('--batches-per-epoch', type=int, default=1500, help='Batches per Epoch')
+    parser.add_argument('--val-batch-size', type=int, default=1, help='Validation Batch Size')
+    parser.add_argument('--val-batches-per-epoch', type=int, default=5440, help='Validation Batches per Epoch')
 
     # Logging etc.
     parser.add_argument('--description', type=str, default='training', help='Training description')
@@ -211,7 +212,7 @@ def run():
                           include_depth=args.use_depth, include_rgb=args.use_rgb)
     val_data = torch.utils.data.DataLoader(
         val_dataset,
-        batch_size=1,
+        batch_size=args.val_batch_size,
         shuffle=False,
         num_workers=args.num_workers
     )
@@ -248,7 +249,7 @@ def run():
 
         # Run Validation
         logging.info('Validating...')
-        test_results = validate(net, device, val_data, args.val_batches)
+        test_results = validate(net, device, val_data, args.val_batches_per_epoch)
         logging.info('%d/%d = %f' % (test_results['correct'], test_results['correct'] + test_results['failed'],
                                      test_results['correct']/(test_results['correct']+test_results['failed'])))
 
