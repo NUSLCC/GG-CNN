@@ -30,6 +30,8 @@ def parse_args():
     # Dataset & Data & Training
     home_dir = os.path.expanduser("~")
     default_dataset = "jacquard"
+    # cornell:885
+    # jacquard 54484
     parser.add_argument('--dataset', type=str, default=default_dataset, help='Dataset Name ("cornell" or "jacquard")')
     parser.add_argument('--dataset-path', type=str, default=home_dir + "/Dataset/" + default_dataset, help='Path to dataset')
     parser.add_argument('--use-depth', type=int, default=1, help='Use Depth image for training (1/0)')
@@ -38,14 +40,14 @@ def parse_args():
     parser.add_argument('--ds-rotate', type=float, default=0.0, help='Shift the start point of the dataset to use a different test/train split for cross validation.')
     parser.add_argument('--num-workers', type=int, default=24, help='Dataset workers')
 
-    parser.add_argument('--epochs', type=int, default=1000, help='Training epochs')
+    parser.add_argument('--epochs', type=int, default=100, help='Training epochs')
     parser.add_argument('--batch-size', type=int, default=32, help='Batch size')
-    parser.add_argument('--batches-per-epoch', type=int, default=1500, help='Batches per Epoch')
+    parser.add_argument('--batches-per-epoch', type=int, default=1530, help='Batches per Epoch')
     parser.add_argument('--val-batch-size', type=int, default=1, help='Validation Batch Size')
-    parser.add_argument('--val-batches-per-epoch', type=int, default=5440, help='Validation Batches per Epoch')
+    parser.add_argument('--val-batches-per-epoch', type=int, default=5448, help='Validation Batches per Epoch')
 
     # Logging etc.
-    parser.add_argument('--description', type=str, default='training', help='Training description')
+    parser.add_argument('--description', type=str, default=default_dataset, help='Training description')
     parser.add_argument('--outdir', type=str, default='output/models/', help='Training Output Directory')
     parser.add_argument('--logdir', type=str, default='tensorboard/', help='Log directory')
     parser.add_argument('--vis', action='store_true', help='Visualise the training process')
@@ -201,15 +203,18 @@ def run():
     train_dataset = Dataset(args.dataset_path, start=0.0, end=args.split, ds_rotate=args.ds_rotate,
                             random_rotate=True, random_zoom=True,
                             include_depth=args.use_depth, include_rgb=args.use_rgb)
+    
     train_data = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=args.batch_size,
         shuffle=True,
         num_workers=args.num_workers
     )
+    
     val_dataset = Dataset(args.dataset_path, start=args.split, end=1.0, ds_rotate=args.ds_rotate,
                           random_rotate=True, random_zoom=True,
                           include_depth=args.use_depth, include_rgb=args.use_rgb)
+    
     val_data = torch.utils.data.DataLoader(
         val_dataset,
         batch_size=args.val_batch_size,
@@ -230,12 +235,12 @@ def run():
     logging.info('Done')
 
     # Print model architecture.
-    summary(net, (input_channels, 300, 300))
-    f = open(os.path.join(save_folder, 'arch.txt'), 'w')
-    sys.stdout = f
-    summary(net, (input_channels, 300, 300))
-    sys.stdout = sys.__stdout__
-    f.close()
+    # summary(net, (input_channels, 300, 300))
+    # f = open(os.path.join(save_folder, 'arch.txt'), 'w')
+    # sys.stdout = f
+    # summary(net, (input_channels, 300, 300))
+    # sys.stdout = sys.__stdout__
+    # f.close()
 
     best_iou = 0.0
     for epoch in range(args.epochs):
