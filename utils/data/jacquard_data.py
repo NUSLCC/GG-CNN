@@ -44,16 +44,40 @@ class JacquardDataset(GraspDatasetBase):
         gtbbs.zoom(zoom, (c, c))
         return gtbbs
 
+    # def get_depth(self, idx, rot=0, zoom=1.0):
+    #     depth_img = image.DepthImage.from_tiff(self.depth_files[idx])
+    #     depth_img.rotate(rot)
+    #     depth_img.normalise()
+    #     depth_img.zoom(zoom)
+    #     depth_img.resize((self.output_size, self.output_size))
+    #     return depth_img.img
+
+    # def get_rgb(self, idx, rot=0, zoom=1.0, normalise=True):
+    #     rgb_img = image.Image.from_file(self.rgb_files[idx])
+    #     rgb_img.rotate(rot)
+    #     rgb_img.zoom(zoom)
+    #     rgb_img.resize((self.output_size, self.output_size))
+    #     if normalise:
+    #         rgb_img.normalise()
+    #         rgb_img.img = rgb_img.img.transpose((2, 0, 1))
+    #     return rgb_img.img
+    
     def get_depth(self, idx, rot=0, zoom=1.0):
-        depth_img = image.DepthImage.from_tiff(self.depth_files[idx])
-        depth_img.rotate(rot)
-        depth_img.normalise()
-        depth_img.zoom(zoom)
-        depth_img.resize((self.output_size, self.output_size))
+        try:
+            depth_img = image.DepthImage.from_tiff(self.depth_files[idx])
+            depth_img.rotate(rot)
+            depth_img.normalise()
+            depth_img.zoom(zoom)
+            depth_img.resize((self.output_size, self.output_size))
+        except Exception as e:
+            print(self.depth_files[idx])
         return depth_img.img
 
     def get_rgb(self, idx, rot=0, zoom=1.0, normalise=True):
-        rgb_img = image.Image.from_file(self.rgb_files[idx])
+        try:            
+            rgb_img = image.Image.from_file(self.rgb_files[idx])
+        except Exception as e:
+            print(self.rgb_files[idx])
         rgb_img.rotate(rot)
         rgb_img.zoom(zoom)
         rgb_img.resize((self.output_size, self.output_size))
