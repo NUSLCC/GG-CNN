@@ -19,7 +19,8 @@ class JacquardDataset(GraspDatasetBase):
         """
         super(JacquardDataset, self).__init__(**kwargs)
 
-        graspf = glob.glob(os.path.join(file_path, '*', '*', '*_grasps.txt'))
+        # graspf = glob.glob(os.path.join(file_path, '*', '*', '*_grasps.txt'))
+        graspf = glob.glob('/media/chenchenliu/data2/Dataset/jacquard' + '/*/*/' + '*_grasps.txt')
         graspf.sort()
         l = len(graspf)
         print("len jaccquard:", l)
@@ -64,20 +65,22 @@ class JacquardDataset(GraspDatasetBase):
     
     def get_depth(self, idx, rot=0, zoom=1.0):
         try:
+            print(idx)
             depth_img = image.DepthImage.from_tiff(self.depth_files[idx])
-            depth_img.rotate(rot)
-            depth_img.normalise()
-            depth_img.zoom(zoom)
-            depth_img.resize((self.output_size, self.output_size))
         except Exception as e:
-            print(self.depth_files[idx])
+            print("error tiff:", self.depth_files[idx])
+        depth_img.rotate(rot)
+        depth_img.normalise()
+        depth_img.zoom(zoom)
+        depth_img.resize((self.output_size, self.output_size))
         return depth_img.img
 
     def get_rgb(self, idx, rot=0, zoom=1.0, normalise=True):
-        try:            
+        try:
+            print(idx)            
             rgb_img = image.Image.from_file(self.rgb_files[idx])
         except Exception as e:
-            print(self.rgb_files[idx])
+            print("error rgb:", self.rgb_files[idx])
         rgb_img.rotate(rot)
         rgb_img.zoom(zoom)
         rgb_img.resize((self.output_size, self.output_size))
